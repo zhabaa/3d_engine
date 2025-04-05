@@ -17,7 +17,12 @@ include_directories("inc/")
 include_directories("ext/SFML/include/")	# добавляем директории
 link_directories("ext/SFML/lib/")
 
-add_executable("${PROJECT_NAME}" main.cpp inc/scene.hpp src/scene.cpp inc/camera.hpp src/camera.cpp inc/matrix.hpp)
+add_executable("${PROJECT_NAME}" main.cpp 
+				inc/scene.hpp 
+				src/scene.cpp 
+				inc/camera.hpp 
+				src/camera.cpp 
+				inc/matrix.hpp)
 	
 						
 target_link_libraries("${PROJECT_NAME}" 

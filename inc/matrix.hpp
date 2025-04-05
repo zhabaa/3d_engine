@@ -1,27 +1,16 @@
-#pragma once
 #include <iostream>
 
 namespace mt::math
 {
-		// MY_DEBUG определена
-		//#define MY_DEBUG 
-
 		template<typename T, int N, int M>
-		struct MasWrapper
-		{
+		struct MasWrapper {
 			T mas[N][M];
 		};
 
 		template<typename T, int N, int M>
-		class Matrix
-		{
+		class Matrix {
 		public:
-			// Конструктор
-			Matrix()
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Constructor" << std::endl;
-	#endif
+			Matrix(){
 				m_n = N;
 				m_m = M;
 				for (int i = 0; i < m_n; i++)
@@ -29,12 +18,7 @@ namespace mt::math
 						m_mat[i][j] = 0;
 			}
 
-			// Конструктор
-			Matrix(const T mas[N][M])
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Constructor" << std::endl;
-	#endif
+			Matrix(const T mas[N][M]) {
 				m_n = N;
 				m_m = M;
 				for (int i = 0; i < m_n; i++)
@@ -42,12 +26,7 @@ namespace mt::math
 						m_mat[i][j] = mas[i][j];
 			}
 
-			// Конструктор
-			Matrix(const MasWrapper<T, N, M>& mas)
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Constructor" << std::endl;
-	#endif
+			Matrix(const MasWrapper<T, N, M>& mas) {
 				m_n = N;
 				m_m = M;
 				for (int i = 0; i < m_n; i++)
@@ -55,13 +34,7 @@ namespace mt::math
 						m_mat[i][j] = mas.mas[i][j];
 			}
 
-			// Конструктор копирования
-			Matrix(const Matrix<T, N, M>& mat)
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Copy constructor" << std::endl;
-	#endif
-
+			Matrix(const Matrix<T, N, M>& mat) {
 				m_n = mat.m_n;
 				m_m = mat.m_m;
 
@@ -70,19 +43,23 @@ namespace mt::math
 						m_mat[i][j] = mat.m_mat[i][j];
 			}
 
-			int getN() const { return m_n; }
-			int getM() const { return m_m; }
-			T get(int i, int j) const { return m_mat[i][j]; }
-			void set(int i, int j, T data) { m_mat[i][j] = data; }
+			int getN() const {
+				return m_n;
+			}
 
-			// Присваивание
-			//template<typename T, int N, int M>
-			Matrix<T, N, M>& operator=(const Matrix<T, N, M>& mat)
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Operator =" << std::endl;
-	#endif
+			int getM() const {
+				return m_m;
+			}
 
+			T get(int i, int j) const {
+				return m_mat[i][j];
+			}
+
+			void set(int i, int j, T data) {
+				m_mat[i][j] = data;
+			}
+
+			Matrix<T, N, M>& operator=(const Matrix<T, N, M>& mat) {
 				m_n = mat.getN();
 				m_m = mat.getM();
 
@@ -93,13 +70,7 @@ namespace mt::math
 				return *this;
 			}
 
-			// Оператор сложения
-			//template<typename T, int N, int M>
-			Matrix<T, N, M> operator+(const Matrix<T, N, M>& mat)
-			{
-	#ifdef MY_DEBUG
-				std::cout << "operator+" << std::endl;
-	#endif
+			Matrix<T, N, M> operator+(const Matrix<T, N, M>& mat) {
 				Matrix<T, N, M> tmp;
 				for (int i = 0; i < m_n; i++)
 					for (int j = 0; j < m_m; j++)
@@ -107,13 +78,7 @@ namespace mt::math
 				return tmp;
 			}
 
-			// Оператор вычитания
-			//template<typename T, int N, int M>
-			Matrix<T, N, M> operator-(const Matrix<T, N, M>& mat)
-			{
-#ifdef MY_DEBUG
-				std::cout << "operator-" << std::endl;
-#endif
+			Matrix<T, N, M> operator-(const Matrix<T, N, M>& mat) {
 				Matrix<T, N, M> tmp;
 				for (int i = 0; i < m_n; i++)
 					for (int j = 0; j < m_m; j++)
@@ -121,13 +86,8 @@ namespace mt::math
 				return tmp;
 			}
 
-			// Оператор умножения
 			template<int U>
-			Matrix<T, N, U> operator*(const Matrix<T, N, U>& mat)
-			{
-	#ifdef MY_DEBUG
-				std::cout << "operator*" << std::endl;
-	#endif
+			Matrix<T, N, U> operator*(const Matrix<T, N, U>& mat) {
 				Matrix<T, N, U> tmp;
 
 				for (int i = 0; i < N; i++)
@@ -142,31 +102,18 @@ namespace mt::math
 				return tmp;
 			}
 
-			// Деструктор
-			~Matrix()
-			{
-	#ifdef MY_DEBUG
-				std::cout << "Destructor" << std::endl;
-	#endif
-			}
+			~Matrix() = default;
 
-			Matrix<T, N, M> inv()
-			{
+			Matrix<T, N, M> inv() {
 				Matrix<T, N, M> mat;
 				return mat;
 			}
 
-
-			int det()
-			{
+			int det() {
 				return 1;
 			}
 
-			// friend - позволяет функции иметь доступ к private полям/методам класса
-			//template<typename T, int N, int M>
 			friend std::istream& operator>>(std::istream& os, Matrix<T, N, M>& mat);
-
-			//template<typename T, int N, int M>
 			friend std::ostream& operator<<(std::ostream& os, const Matrix<T, N, M>& mat);
 
 		private:
@@ -174,20 +121,16 @@ namespace mt::math
 			T m_mat[N][M];
 		};
 
-		// Перегрузка оператора ввода
 		template<typename T, int N, int M>
-		std::istream& operator>>(std::istream& in, Matrix<T, N, M>& mat)
-		{
+		std::istream& operator>>(std::istream& in, Matrix<T, N, M>& mat) {
 			for (int i = 0; i < mat.m_n; i++)
 				for (int j = 0; j < mat.m_m; j++)
 					in >> mat.m_mat[i][j];
 			return in;
 		}
 
-		// Перегрузка оператора вывода
 		template<typename T, int N, int M>
-		std::ostream& operator<<(std::ostream& out, const Matrix<T, N, M>& mat)
-		{
+		std::ostream& operator<<(std::ostream& out, const Matrix<T, N, M>& mat) {
 			out << "Matrix " << mat.m_n << "x" << mat.m_m << std::endl;
 			for (int i = 0; i < mat.m_n; i++) {
 				for (int j = 0; j < mat.m_m; j++)
@@ -197,7 +140,7 @@ namespace mt::math
 			return out;
 		}
 
-		using Vec2i = Matrix<int, 2, 1>;	// Сокращенное удобное название
+		using Vec2i = Matrix<int, 2, 1>;
 		using Vec2d = Matrix<double, 2, 1>;
 		using Mat22i = Matrix<int, 2, 2>;
 		using Mat22d = Matrix<double, 2, 2>;

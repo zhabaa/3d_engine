@@ -1,31 +1,25 @@
 #pragma once
 #include <iostream>
 
-namespace mt
-{
-	struct Point
-	{
+namespace mt {
+	struct Point {
 		double x, y, z;
 	};
 
-	struct Angles
-	{
+	struct Angles {
 		double roll, pitch, yaw;
 	};
 
-	struct Pixel
-	{
+	struct Pixel {
 		uint8_t r, g, b, a;
 	};
 
-	struct Intrinsic
-	{
+	struct Intrinsic {
 		double fu, fv;
 		double du, dv;
 	};
 
-	class Camera
-	{
+	class Camera {
 	public:
 		Camera(int width, int height, Intrinsic intrinsic, Point position, Angles angles);
 		~Camera();
