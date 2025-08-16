@@ -78,10 +78,13 @@ namespace mt
 
         m_camera = std::make_unique<Camera>(m_width, m_height, intrinsic, position, angles);
 
-        generateSpheres(1.0, {0.0, 2.0, 0.0}, {255, 255, 255, 255});
-        generateSpheres(1.0, {0.0, -2.0, 0.0}, {255, 255, 255, 255});
-        generateSurface({0,0,0}, 10.0, {255,255,255,255}, M_PI/2, 0, 0);
-        generateCube(1.0, {1.0, 1.0, 1.0}, {255, 255, 255, 255});
+        // generateSpheres(1.0, {0.0, 2.0, 0.0}, {255, 255, 255, 255});
+        // generateSpheres(1.0, {0.0, -2.0, 0.0}, {255, 255, 255, 255});
+        // generateSurface({0,0,0}, 10.0, {255,255,255,255}, M_PI/2, 0, 0);
+        // generateCube(1.0, {1.0, 1.0, 1.0}, {255, 255, 255, 255});
+        // generateHeart(3, {0, 0, 0}, {255, 0, 0, 255}); // Красное сердце в центре
+        generateHeart2(2, {0, 0, 0}, {255, 0, 0, 255}); // Красное сердце в центре
+
     }
 
     void Scene::SetViewFrustum(const ViewFrustum& frustum) {
@@ -198,6 +201,80 @@ namespace mt
         objects.push_back(surface);
     }
 
+    void Scene::generateHeart(double scale, const Point& center, const Pixel& color) {
+        Object heart;
+        heart.color = color;
+
+        const double step = 0.05;
+        const double bound = 1.5;
+        const double threshold = 0.1;
+
+        for (double x = -bound; x <= bound; x += step) {
+            for (double y = -bound; y <= bound; y += step) {
+                for (double z = -bound; z <= bound; z += step) {
+                    double x2 = x * x;
+                    double y2 = y * y;
+                    double z3 = z * z * z;
+
+                    double left = pow(x2 + (9.0/4.0)*y2 + z*z - 1, 3);
+                    double right = x2 * z3 + (9.0/200.0) * y2 * z3;
+
+                    if (fabs(left - right) < threshold) {
+                        heart.points.push_back({
+                            x * scale + center.x,
+                            y * scale + center.y,
+                            z * scale + center.z
+                        });
+                    }
+                }
+            }
+        }
+
+        objects.push_back(heart);
+    }
+
+    void Scene::generateHeart2(double size, const Point& center, const Pixel& color, double precision, double threshold) {
+        Object heart;
+        heart.color = color;
+
+        // Границы для поиска точек сердца
+        const double bound = 1.3 * size; // Увеличиваем границу с учетом масштаба
+
+        // Проходим по всем точкам в кубе вокруг центра
+        for (double x = -bound; x <= bound; x += precision) {
+            for (double y = -bound; y <= bound; y += precision) {
+                for (double z = -bound; z <= bound; z += precision) {
+                    // Нормализуем координаты перед проверкой уравнения
+                    double nx = x / size;
+                    double ny = y / size;
+                    double nz = z / size;
+
+                    // Вычисляем компоненты уравнения
+                    double x2 = nx * nx;
+                    double y2 = ny * ny;
+                    double z2 = nz * nz;
+                    double z3 = z2 * nz;
+
+                    // Левая часть уравнения
+                    double left = pow(x2 + (9.0/4.0)*y2 + z2 - 1.0, 3);
+                    // Правая часть уравнения
+                    double right = x2 * z3 + (9.0/80.0) * y2 * z3;
+
+                    // Проверяем попадание точки на поверхность сердца
+                    if (fabs(left - right) < threshold) {
+                        heart.points.push_back({
+                            x + center.x,
+                            y + center.y,
+                            z + center.z
+                        });
+                    }
+                }
+            }
+        }
+
+        objects.push_back(heart);
+    }
+    
     void Scene::handleInput() {
         const float moveSpeed = 0.05f;
         const float rotateSpeed = 0.01f;

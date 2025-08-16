@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <camera.hpp>
 #include <vector>
+#include <memory>
+
 
 namespace mt {
     struct CustomColor {
@@ -52,6 +54,9 @@ namespace mt {
         void generateSurface(const Point &center, double size, const Pixel &color, double rotX = 0.0, double rotY = 0.0, double rotZ = 0.0);
         void generateSpheres(double radius, const Point &center, const Pixel &color);
         void generateCube(double side, const Point &center, const Pixel &color);
+        void generateHeart(double scale, const Point& center, const Pixel& color);
+        void generateBeautifulHeart(double size, const Point& center, const Pixel& color, int detail = 50);    
+        void generateHeart2(double size, const Point& center, const Pixel& color, double precision = 0.05, double threshold = 0.01);
 
         void handleInput();
     };
